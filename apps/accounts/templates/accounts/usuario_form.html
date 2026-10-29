@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+<div class="tarjeta" style="max-width:560px">
+  <h1>{{ titulo }}</h1>
+  <form method="post" novalidate>{% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for campo in form %}
+      <div class="campo">
+        {{ campo.label_tag }}{{ campo }}
+        {% if campo.help_text %}<div class="ayuda">{{ campo.help_text|safe }}</div>{% endif %}
+        {{ campo.errors }}
+      </div>
+    {% endfor %}
+    <div class="acciones">
+      <button class="btn" type="submit">Guardar</button>
+      <a class="btn sec" href="{% url 'accounts:usuarios' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

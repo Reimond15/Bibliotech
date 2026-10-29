@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block titulo %}Eliminar libro{% endblock %}
+{% block contenido %}
+<div class="tarjeta" style="max-width:560px">
+  <h1>Eliminar libro</h1>
+  <p>¿Seguro que quieres eliminar <strong>{{ object.titulo }}</strong> del catálogo? Esta acción no se puede deshacer.</p>
+  <form method="post">{% csrf_token %}
+    <div class="acciones">
+      <button class="btn peligro" type="submit">Sí, eliminar</button>
+      <a class="btn sec" href="{% url 'catalog:libros' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

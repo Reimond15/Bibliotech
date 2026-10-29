@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block titulo %}Acceso denegado{% endblock %}
+{% block contenido %}
+<div class="tarjeta">
+  <h1>Acceso denegado</h1>
+  <p>Tu rol no tiene permiso para ver esta página.</p>
+  <a class="btn" href="{% url 'home' %}">Volver al inicio</a>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block titulo %}Categorías{% endblock %}
+{% block contenido %}
+<div class="tarjeta">
+  <div class="fila" style="margin-bottom:1rem">
+    <h1 style="flex:2 1 200px;margin:0">Categorías</h1>
+    <div style="text-align:right"><a class="btn" href="{% url 'catalog:categoria_crear' %}">Nueva categoría</a></div>
+  </div>
+  <table>
+    <thead><tr><th>Nombre</th><th>Libros</th><th></th></tr></thead>
+    <tbody>
+    {% for c in categorias %}
+      <tr><td>{{ c.nombre }}</td><td>{{ c.libros.count }}</td>
+          <td><a class="btn peligro chico" href="{% url 'catalog:categoria_eliminar' c.pk %}">Eliminar</a></td></tr>
+    {% empty %}
+      <tr><td colspan="3">Aún no hay categorías.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

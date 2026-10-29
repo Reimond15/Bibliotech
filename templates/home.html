@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block titulo %}Inicio{% endblock %}
+{% block contenido %}
+<div class="tarjeta">
+  <h1>Bienvenido, {{ user.get_full_name|default:user.username }}</h1>
+  <p>Sesión iniciada como <strong>{{ user.get_rol_display }}</strong>.</p>
+</div>
+<div class="indicadores">
+  <div class="tarjeta indicador"><strong>{{ total_libros }}</strong>títulos en el catálogo</div>
+  <div class="tarjeta indicador"><strong>{{ disponibles }}</strong>títulos disponibles</div>
+  {% if user.es_administrador %}
+  <div class="tarjeta indicador"><strong>{{ total_usuarios }}</strong>usuarios registrados</div>
+  {% endif %}
+</div>
+<div class="tarjeta acciones">
+  <a class="btn" href="{% url 'catalog:libros' %}">Buscar libros</a>
+  {% if user.es_administrador %}
+    <a class="btn sec" href="{% url 'catalog:libro_crear' %}">Registrar libro</a>
+    <a class="btn sec" href="{% url 'accounts:usuario_crear' %}">Registrar usuario</a>
+  {% endif %}
+</div>
+{% endblock %}

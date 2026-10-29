@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block titulo %}Catálogo{% endblock %}
+{% block contenido %}
+<div class="tarjeta">
+  <div class="fila" style="margin-bottom:1rem">
+    <h1 style="flex:2 1 200px;margin:0">Catálogo de libros</h1>
+    {% if user.es_administrador %}
+    <div style="text-align:right"><a class="btn" href="{% url 'catalog:libro_crear' %}">Registrar libro</a></div>
+    {% endif %}
+  </div>
+  <form method="get" class="fila" style="margin-bottom:1rem">
+    <div style="flex:2 1 220px"><label for="q">Buscar por título, autor o ISBN</label><input id="q" name="q" value="{{ q }}"></div>
+    <div><label for="categoria">Categoría</label>
+      <select id="categoria" name="categoria"><option value="">Todas</option>
+        {% for c in categorias %}<option value="{{ c.pk }}" {% if c.pk|stringformat:"s" == categoria_sel %}selected{% endif %}>{{ c.nombre }}</option>{% endfor %}
+      </select></div>
+    <div><label for="disponibilidad">Disponibilidad</label>
+      <select id="disponibilidad" name="disponibilidad">
+        <option value="">Todos</option>
+        <option value="disponible" {% if disp_sel == "disponible" %}selected{% endif %}>Disponibles</option>
+        <option value="prestado" {% if disp_sel == "prestado" %}selected{% endif %}>Sin ejemplares</option>
+      </select></div>
+    <div><button class="btn" type="submit">Buscar</button></div>
+  </form>
+  <table>
+    <thead><tr><th>Título</th><th>Autor</th><th>Categoría</th><th>ISBN</th><th>Disponibilidad</th>{% if user.es_administrador %}<th></th>{% endif %}</tr></thead>
+    <tbody>
+    {% for l in libros %}
+      <tr>
+        <td>{{ l.titulo }}</td><td>{{ l.autor }}</td><td>{{ l.categoria }}</td><td>{{ l.isbn }}</td>
+        <td><span class="etiqueta {% if l.disponible %}ok{% else %}no{% endif %}">{% if l.disponible %}Disponible{% else %}Prestado{% endif %}</span>
+            <span class="ayuda">{{ l.cantidad_disponible }}/{{ l.cantidad_total }}</span></td>
+        {% if user.es_administrador %}
+        <td class="acciones">
+          <a class="btn sec chico" href="{% url 'catalog:libro_editar' l.pk %}">Editar</a>
+          <a class="btn peligro chico" href="{% url 'catalog:libro_eliminar' l.pk %}">Eliminar</a>
+        </td>
+        {% endif %}
+      </tr>
+    {% empty %}
+      <tr><td colspan="6">No se encontraron libros.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% include "paginacion.html" %}
+</div>
+{% endblock %}

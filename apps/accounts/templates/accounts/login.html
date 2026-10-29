@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block titulo %}Iniciar sesión{% endblock %}
+{% block contenido %}
+<div class="tarjeta login">
+  <h1>BiblioTech</h1>
+  <p class="ayuda">Sistema de gestión de biblioteca digital</p>
+  <form method="post">{% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="campo">{{ form.username.label_tag }}{{ form.username }}</div>
+    <div class="campo">{{ form.password.label_tag }}{{ form.password }}</div>
+    <input type="hidden" name="next" value="{{ next }}">
+    <button class="btn" type="submit">Iniciar sesión</button>
+  </form>
+</div>
+{% endblock %}

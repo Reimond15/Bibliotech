@@ -1,0 +1,35 @@
+{% load static %}<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}BiblioTech{% endblock %} · BiblioTech</title>
+  <link rel="stylesheet" href="{% static 'css/bibliotech.css' %}">
+</head>
+<body>
+  {% if user.is_authenticated %}
+  <header class="barra">
+    <a class="marca" href="{% url 'home' %}">BiblioTech</a>
+    <a href="{% url 'catalog:libros' %}">Buscar libros</a>
+    {% if user.es_administrador %}
+      <a href="{% url 'catalog:categorias' %}">Categorías</a>
+      <a href="{% url 'accounts:usuarios' %}">Usuarios</a>
+    {% endif %}
+    <div class="derecha">
+      <span>{{ user.get_full_name|default:user.username }} · {{ user.get_rol_display }}</span>
+      <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}
+        <button class="btn salir" type="submit">Salir</button>
+      </form>
+    </div>
+  </header>
+  {% endif %}
+  <main>
+    {% if messages %}
+    <ul class="mensajes">
+      {% for m in messages %}<li class="{{ m.tags }}">{{ m }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+    {% block contenido %}{% endblock %}
+  </main>
+</body>
+</html>

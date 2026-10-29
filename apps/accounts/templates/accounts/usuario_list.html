@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block titulo %}Usuarios{% endblock %}
+{% block contenido %}
+<div class="tarjeta">
+  <div class="fila" style="margin-bottom:1rem">
+    <h1 style="flex:2 1 200px;margin:0">Usuarios</h1>
+    <div style="text-align:right"><a class="btn" href="{% url 'accounts:usuario_crear' %}">Registrar usuario</a></div>
+  </div>
+  <form method="get" class="fila" style="margin-bottom:1rem">
+    <div><label for="q">Buscar</label><input id="q" name="q" value="{{ q }}" placeholder="Nombre, usuario o correo"></div>
+    <div><label for="rol">Rol</label>
+      <select id="rol" name="rol"><option value="">Todos</option>
+        {% for valor, nombre in roles %}<option value="{{ valor }}" {% if valor == rol_sel %}selected{% endif %}>{{ nombre }}</option>{% endfor %}
+      </select></div>
+    <div><button class="btn" type="submit">Filtrar</button></div>
+  </form>
+  <table>
+    <thead><tr><th>Usuario</th><th>Nombre</th><th>Rol</th><th>Membresía</th><th>Estado</th><th></th></tr></thead>
+    <tbody>
+    {% for u in usuarios %}
+      <tr>
+        <td>{{ u.username }}</td>
+        <td>{{ u.get_full_name|default:"—" }}</td>
+        <td>{{ u.get_rol_display }}</td>
+        <td>{{ u.membresia|default:"—" }}</td>
+        <td><span class="etiqueta {% if u.is_active %}ok{% else %}no{% endif %}">{% if u.is_active %}Activo{% else %}Desactivado{% endif %}</span></td>
+        <td class="acciones">
+          <a class="btn sec chico" href="{% url 'accounts:usuario_editar' u.pk %}">Editar</a>
+          <form method="post" action="{% url 'accounts:usuario_estado' u.pk %}">{% csrf_token %}
+            <button class="btn chico {% if u.is_active %}peligro{% endif %}" type="submit">{% if u.is_active %}Desactivar{% else %}Activar{% endif %}</button>
+          </form>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6">No hay usuarios que coincidan.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% include "paginacion.html" %}
+</div>
+{% endblock %}

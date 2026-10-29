@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block titulo %}Eliminar categoría{% endblock %}
+{% block contenido %}
+<div class="tarjeta" style="max-width:560px">
+  <h1>Eliminar categoría</h1>
+  <p>¿Eliminar la categoría <strong>{{ object.nombre }}</strong>? Solo se puede si no tiene libros.</p>
+  <form method="post">{% csrf_token %}
+    <div class="acciones">
+      <button class="btn peligro" type="submit">Sí, eliminar</button>
+      <a class="btn sec" href="{% url 'catalog:categorias' %}">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
